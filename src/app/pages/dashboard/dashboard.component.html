@@ -1,0 +1,206 @@
+<app-header></app-header>
+
+<div class="app-body">
+  <app-sidebar></app-sidebar>
+
+  <!-- Main content -->
+  <main class="main">
+    <!-- Breadcrumb -->
+    <ol class="breadcrumb">
+      <!-- Breadcrumb Menu-->
+      <li class="breadcrumb-item active">
+        <div class="btn-group" role="group" >
+          <!-- <a class="btn" href="#"><i class="icon-speech"></i></a> -->
+          <a class="btn">Dashboard</a>
+          <!-- <a class="btn"><i class="icon-settings"></i> &nbsp;Settings</a> -->
+        </div>
+      </li>
+
+    </ol>
+
+    <div class="container-fluid">
+        <div class="animated fadeIn">
+            <div class="row">
+              <div class="col-sm-6 col-lg-3">
+                <div class="card text-white bg-primary">
+                  <div class="card-body pb-0">
+                    <!-- <button type="button" class="btn btn-transparent p-0 dropdown-toggle float-right">
+                      <i class="icon-settings"></i>
+                    </button> -->
+                    <h4 class="mb-0">{{installdata.count}}</h4>
+                    <p>Installs</p>
+                  </div>
+                  <div class="chart-wrapper px-3" style="height:70px;">
+                    <canvas baseChart
+                              [datasets]="installdata.chartProperty.data"
+                              [labels]="installdata.chartProperty.labels"
+                              [options]="installdata.chartProperty.options"
+                              [legend]="installdata.chartProperty.legend"
+                              [colors] = "installdata.chartProperty.colors"
+                              [chartType]="installdata.chartProperty.chartType">
+                      </canvas>
+                  </div>
+                </div>
+              </div>  
+              <div class="col-sm-6 col-lg-3">
+                  <div class="card text-white bg-info">
+                    <div class="card-body pb-0">
+                      <!-- <button type="button" class="btn btn-transparent p-0 float-right">
+                        <i class="icon-location-pin"></i>
+                      </button> -->
+                      <h4 class="mb-0">{{activedata.count}}</h4>
+                      <p>Active Users</p>
+                    </div>
+                    <div class="chart-wrapper px-3 activeChart" style="height:70px;">
+                      <canvas baseChart
+                                [datasets]="activedata.chartProperty.data"
+                                [labels]="activedata.chartProperty.labels"
+                                [options]="activedata.chartProperty.options"
+                                [legend]="activedata.chartProperty.legend"
+                                [colors] = "activedata.chartProperty.colors"
+                                [chartType]="activedata.chartProperty.chartType">
+                        </canvas>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card text-white bg-warning" >
+                    <div class="card-body pb-0">
+                      <div class="btn-group float-right">
+                        <!-- <button type="button" class="btn btn-transparent dropdown-toggle p-0" data-toggle="dropdown">
+                          <i class="icon-settings"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                          <a class="dropdown-item" href="#">Action</a>
+                          <a class="dropdown-item" href="#">Another action</a>
+                          <a class="dropdown-item" href="#">Something else here</a>
+                        </div> -->
+                      </div>
+                      <h4 class="mb-0">{{engagementData.count}}</h4>
+                      <p>Engagements</p>
+                    </div>
+                    <div class="chart-wrapper px-3 sessionChart" style="height:70px;">
+                      <canvas baseChart
+                              [datasets]="engagementData.chartProperty.data"
+                              [labels]="engagementData.chartProperty.labels"
+                              [options]="engagementData.chartProperty.options"
+                              [legend]="engagementData.chartProperty.legend"
+                              [colors] = "engagementData.chartProperty.colors"
+                              [chartType]="engagementData.chartProperty.chartType">
+                      </canvas>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card text-white bg-danger" >
+                    <div class="card-body pb-0">
+                      <div class="btn-group float-right">
+                        <!-- <button type="button" class="btn btn-transparent dropdown-toggle p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="icon-settings"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                          <a class="dropdown-item" href="#">Action</a>
+                          <a class="dropdown-item" href="#">Another action</a>
+                          <a class="dropdown-item" href="#">Something else here</a>
+                        </div> -->
+                      </div>
+                      <h4 class="mb-0">{{churnData.count}}</h4>
+                      <p>Churn</p>
+                    </div>
+                    <div class="chart-wrapper px-3 chrunChart" style="height:70px;">
+                      <canvas baseChart
+                                [datasets]="churnData.chartProperty.data"
+                                [labels]="churnData.chartProperty.labels"
+                                [options]="churnData.chartProperty.options"
+                                [legend]="churnData.chartProperty.legend"
+                                [colors] = "churnData.chartProperty.colors"
+                                [chartType]="churnData.chartProperty.chartType">
+                        </canvas>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <!--/.row-->
+          
+            <div class="card" >
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-5">
+                    <h4 class="card-title mb-0">Traffic</h4>
+                    <div class="small text-muted">November 2017</div>
+                  </div>
+                  
+                  <div class="col-sm-7 d-none d-md-block">
+                    <!-- <button type="button" class="btn btn-primary float-right"><i class="icon-cloud-download"></i></button> -->
+                    <div class="btn-group btn-group-toggle float-right mr-3" data-toggle="buttons">
+                      <label class="btn btn-outline-secondary">
+                        <input type="radio" name="options" id="option1" autocomplete="off"> Day
+                      </label>
+                      <label class="btn btn-outline-secondary active">
+                        <input type="radio" name="options" id="option2" autocomplete="off" checked> Month
+                      </label>
+                      <label class="btn btn-outline-secondary">
+                        <input type="radio" name="options" id="option3" autocomplete="off"> Year
+                      </label>
+                    </div>
+                  </div>
+                  
+                </div>
+                <!--/.row-->
+                <div class="chart-wrapper" style="height:300px;margin-top:40px;">
+                  <!-- <canvas class="chart chart-line" height="300"></canvas> -->
+                  <canvas baseChart
+                                [datasets]="eventdata.data"
+                                [labels]="eventdata.labels"
+                                [options]="eventdata.options"
+                                [legend]="eventdata.legend"
+                                [colors] = "eventdata.colors"
+                                [chartType]="eventdata.chartType" height="300">
+                        </canvas>
+                </div>
+              </div>
+              <!-- <div class="card-footer">
+                <ul>
+                  <li>
+                    <div class="text-muted">Visits</div>
+                    <strong>29.703 Users (40%)</strong>
+                    <div class="progress progress-xs mt-2">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 40%" ></div>
+                    </div>
+                  </li>
+                  <li class="d-none d-md-table-cell">
+                    <div class="text-muted">Unique</div>
+                    <strong>24.093 Users (20%)</strong>
+                    <div class="progress progress-xs mt-2">
+                      <div class="progress-bar bg-info" role="progressbar" style="width: 20%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="text-muted">Pageviews</div>
+                    <strong>78.706 Views (60%)</strong>
+                    <div class="progress progress-xs mt-2">
+                      <div class="progress-bar bg-warning" role="progressbar" style="width: 60%" ></div>
+                    </div>
+                  </li>
+                  <li class="d-none d-md-table-cell">
+                    <div class="text-muted">New Users</div>
+                    <strong>22.123 Users (80%)</strong>
+                    <div class="progress progress-xs mt-2">
+                      <div class="progress-bar bg-danger" role="progressbar" style="width: 80%" ></div>
+                    </div>
+                  </li>
+                  <li class="d-none d-md-table-cell">
+                    <div class="text-muted">Bounce Rate</div>
+                    <strong>40.15%</strong>
+                    <div class="progress progress-xs mt-2">
+                      <div class="progress-bar" role="progressbar" style="width: 40%" ></div>
+                    </div>
+                  </li>
+                </ul>
+              </div> -->
+            </div>
+          </div>
+        </div>
+  </main>
+</div>
+<app-footer></app-footer>
