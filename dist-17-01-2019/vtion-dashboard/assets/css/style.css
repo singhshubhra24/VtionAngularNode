@@ -241,9 +241,6 @@ button {
 .breadcrumb, .app-footer { background-color: #ffff !important; border-radius:0px !important;}
 .card {border-radius:0px !important;}
 main { background-color: #e9ecef !important; }
-.loader {
-  text-align: center;
-}
 
 button:focus {
   outline: 1px dotted;

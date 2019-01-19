@@ -1,0 +1,42 @@
+<app-header></app-header>
+
+<div class="app-body">
+  <app-sidebar></app-sidebar>
+
+  <!-- Main content -->
+  <main class="main" style="min-height: 550px;">
+    
+    <div class="container-fluid">
+        <div class="animated fadeIn" style="margin-top:15px;">
+            <div class="card-columns cols-1">
+                <div *ngFor="let app of apps; let i = index">
+                    <div class="card">
+                        <div class="card-header">
+                          <i class="icon-graph icon-bg"></i>{{app.name}}
+                        </div>
+                        <div class="card-body">
+                            <div class="row" style="padding: 10px;">
+                                <div class="col-sm-5">
+                                    <p>Total Installs</p>
+                                    <p>{{app.installs}}</p>
+                                </div>
+                                <div class="col-sm-5">
+                                    <p>Total Uninstalls</p>
+                                    <p>{{app.uninstalls}}</p>
+                                </div>
+                            </div>
+                            <div class="col-xs">
+                                <button type="button" routerLink="/dashboard/{{app.appid}}" class="btn btn-outline-success">Dashboard</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!isApps">
+                    <h4>Apps not found!</h4>
+                </div>
+            </div>
+        </div>
+      </div>
+  </main>
+</div>
+<app-footer></app-footer>

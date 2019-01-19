@@ -27,11 +27,12 @@
                     <!-- <button type="button" class="btn btn-transparent p-0 dropdown-toggle float-right">
                       <i class="icon-settings"></i>
                     </button> -->
-                    <h4 class="mb-0">{{installdata.count}}</h4>
+                    <h4 class="mb-0" *ngIf="installdata">{{installdata.count}}</h4>
+                    <h4 class="mb-0" *ngIf="!installdata">0</h4>
                     <p>Installs</p>
                   </div>
-                  <div class="chart-wrapper px-3" style="height:70px;">
-                    <canvas baseChart
+                  <div class="chart-wrapper px-3" style="height:70px;" >
+                    <canvas baseChart *ngIf="installdata"
                               [datasets]="installdata.chartProperty.data"
                               [labels]="installdata.chartProperty.labels"
                               [options]="installdata.chartProperty.options"
@@ -48,11 +49,12 @@
                       <!-- <button type="button" class="btn btn-transparent p-0 float-right">
                         <i class="icon-location-pin"></i>
                       </button> -->
-                      <h4 class="mb-0">{{activedata.count}}</h4>
+                      <h4 class="mb-0" *ngIf="activedata">{{activedata.count}}</h4>
+                      <h4 class="mb-0" *ngIf="!activedata">0</h4>
                       <p>Active Users</p>
                     </div>
                     <div class="chart-wrapper px-3 activeChart" style="height:70px;">
-                      <canvas baseChart
+                      <canvas baseChart *ngIf="activedata"
                                 [datasets]="activedata.chartProperty.data"
                                 [labels]="activedata.chartProperty.labels"
                                 [options]="activedata.chartProperty.options"
@@ -126,20 +128,20 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-sm-5">
-                    <h4 class="card-title mb-0">Traffic</h4>
-                    <div class="small text-muted">November 2017</div>
+                    <h4 class="card-title mb-0">Events</h4>
+                    <div class="small text-muted">{{fromDate}} - {{toDate}}</div>
                   </div>
                   
                   <div class="col-sm-7 d-none d-md-block">
                     <!-- <button type="button" class="btn btn-primary float-right"><i class="icon-cloud-download"></i></button> -->
                     <div class="btn-group btn-group-toggle float-right mr-3" data-toggle="buttons">
-                      <label class="btn btn-outline-secondary">
-                        <input type="radio" name="options" id="option1" autocomplete="off"> Day
+                      <label class="btn btn-outline-secondary" (click)="selectEventTime('day')">
+                        <input type="radio" name="options" id="option1"  autocomplete="off"> Day
                       </label>
-                      <label class="btn btn-outline-secondary active">
+                      <label class="btn btn-outline-secondary active" (click)="selectEventTime('month')">
                         <input type="radio" name="options" id="option2" autocomplete="off" checked> Month
                       </label>
-                      <label class="btn btn-outline-secondary">
+                      <label class="btn btn-outline-secondary" (click)="selectEventTime('year')">
                         <input type="radio" name="options" id="option3" autocomplete="off"> Year
                       </label>
                     </div>
@@ -148,8 +150,7 @@
                 </div>
                 <!--/.row-->
                 <div class="chart-wrapper" style="height:300px;margin-top:40px;">
-                  <!-- <canvas class="chart chart-line" height="300"></canvas> -->
-                  <canvas baseChart
+                  <canvas baseChart *ngIf="eventdata"
                                 [datasets]="eventdata.data"
                                 [labels]="eventdata.labels"
                                 [options]="eventdata.options"
@@ -157,6 +158,9 @@
                                 [colors] = "eventdata.colors"
                                 [chartType]="eventdata.chartType" height="300">
                         </canvas>
+                    <div class="loader" *ngIf="!eventdata">
+                        <img src="./assets/img/loader.gif" />
+                    </div>
                 </div>
               </div>
               <!-- <div class="card-footer">

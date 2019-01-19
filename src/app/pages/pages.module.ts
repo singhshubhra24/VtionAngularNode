@@ -6,14 +6,15 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { HomeComponent } from './home/home.component';
 
 const routes : Routes =[
     {
         path:'',
-        component : DashboardComponent
+        component : HomeComponent
     },
     {
-      path:'dashboard',
+      path:'dashboard/:appid',
       component : DashboardComponent
   }
 ]
@@ -25,7 +26,7 @@ const routes : Routes =[
     RouterModule.forRoot(routes),
     ChartsModule
   ],
-  declarations: [DashboardComponent, HeaderComponent, FooterComponent, SidebarComponent],
+  declarations: [DashboardComponent, HeaderComponent, FooterComponent, SidebarComponent, HomeComponent],
   exports: [DashboardComponent]
 })
 export class PagesModule { }
