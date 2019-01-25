@@ -7,6 +7,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HomeComponent } from './home/home.component';
+import { SharedModule } from '../shared/shared.module';
 
 const routes : Routes =[
     {
@@ -24,7 +25,8 @@ const routes : Routes =[
     CommonModule,
     RouterModule,
     RouterModule.forRoot(routes),
-    ChartsModule
+    ChartsModule,
+    SharedModule
   ],
   declarations: [DashboardComponent, HeaderComponent, FooterComponent, SidebarComponent, HomeComponent],
   exports: [DashboardComponent]

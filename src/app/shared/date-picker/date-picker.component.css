@@ -1,0 +1,7 @@
+span, lib-daterangepicker, span > .main-color {
+    color: #6c757d !important;
+}
+span > .daterange {
+    font-family : sans-serif !important;
+    padding : 0px !important;
+}

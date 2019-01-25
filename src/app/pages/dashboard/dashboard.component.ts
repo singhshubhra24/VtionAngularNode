@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit {
   engagementData : any;
   churnData : any;
   eventdata : any;
+  eventMsg = '';
   appid : string;
   start =  moment().subtract('days', 30).valueOf()/1000;
   end =  moment().valueOf()/1000;
@@ -26,16 +27,18 @@ export class DashboardComponent implements OnInit {
         private dashboardService : DashboardService) {
   }
 
-  installs (){
-      this.dashboardService.getInstalls(this.appid, this.start.toString(), this.end.toString()).subscribe(result =>{
-          if(result['statusCode'] == 200 && result['data']){
+  installs (start, end){
+      this.dashboardService.getInstalls(this.appid, start.toString(), end.toString()).subscribe(result =>{
+          if(result.statusCode == 200 && result.data){
               var lables = [];
               var data = []
               var total = 0
-              Object.keys(result['data']).forEach(key => {
+              // sorted array with value
+              result.data = this.shortObject(result.data);
+              Object.keys(result.data).forEach(key => {
                 lables.push(key);
-                data.push(result['data'][key]);
-                total += result['data'][key];
+                data.push(result.data[key]);
+                total += result.data[key];
               })
 
               this.installdata = {
@@ -90,8 +93,8 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  active (){
-    this.dashboardService.getInstalls(this.appid, this.start.toString(), this.end.toString()).subscribe(result =>{
+  active (start, end){
+    this.dashboardService.getInstalls(this.appid, start.toString(), end.toString()).subscribe(result =>{
         if(result['statusCode'] == 200 && result['data']){
             var lables = [];
             var data = []
@@ -154,7 +157,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  engagements (){
+  engagements (start, end){
       this.engagementData = {
         count : 0,
         chartProperty : {
@@ -205,7 +208,7 @@ export class DashboardComponent implements OnInit {
       }
   }
 
-  churn (){
+  churn (start, end){
       this.churnData = {
         count : 0,
         chartProperty : {
@@ -261,16 +264,34 @@ export class DashboardComponent implements OnInit {
       this.toDate = moment(end*1000).format('MMM DD, YYYY')
 
       this.dashboardService.getEvents(this.appid, start.toString(), end.toString()).subscribe(result =>{
-        if(result['statusCode'] == 200 && result['data']){
+        if(result.statusCode == 200 && result.data && Object.entries(result.data).length > 0 ){
+          this.eventMsg = '';
           var lables = [];
-          var data = []
-          Object.keys(result['data']).forEach(lable => {
+          var data = [];
+          var colors = [];
+          // get event name from dynamic obje
+          Object.keys(result.data).forEach(lable => {
               let tmpdata = [];
-              Object.keys(result['data'][lable]).forEach(date => {
+              // sorted array with value
+              result.data[lable] = Object.keys(result.data[lable])
+                                          .sort().reduce((a, v) => {
+                                            a[v] = result.data[lable][v];
+                                            return a; }
+                                        , {});
+
+              // get dynamic event date
+              Object.keys(result.data[lable]).forEach(date => {
                   if(lables.indexOf(date) == -1){
                     lables.push(date);
                   }
-                  tmpdata.push(result['data'][lable][date]);
+                  tmpdata.push(result.data[lable][date]);
+              });
+
+              let color = this.getRandomColor();
+              colors.push({
+                  backgroundColor: color,
+                  borderColor: color,
+                  //pointHoverBackgroundColor: '#fff'
               });
 
               data.push({
@@ -280,49 +301,39 @@ export class DashboardComponent implements OnInit {
           });
 
           this.eventdata = {
-              colors : [{
-                  backgroundColor: this.convertHex('#63c2de',10),
-                  borderColor: '#63c2de',
-                  pointHoverBackgroundColor: '#fff'
-              }, {
-                backgroundColor: 'transparent',
-                borderColor: '#4dbd74',
-                pointHoverBackgroundColor: '#fff'
-              },{
-                backgroundColor: 'transparent',
-                borderColor: '#f86c6b',
-                pointHoverBackgroundColor: '#fff',
-                borderWidth: 1,
-                borderDash: [8, 5]
-              }],
-              // data : [
-              //   {data:[1, 18, 9, 17, 34, 22, 11], label : 'FM_Tuned'},
-              //   {data:[19, 33, 1, 54, 90, 64, 24], label : 'Audio_Tuned'}
-              // ],
-              data :  data,
+              colors : colors,
+              data : data,
               options : {
-                  //scaleShowVerticalLines: false,
+                  scaleShowVerticalLines: false,
                   responsive: true,
-                  //maintainAspectRatio: false,
+                  maintainAspectRatio: false,
+                  fill : false,
                   scales: {
                       xAxes: [{
-                        gridLines: {
-                          color: 'transparent',
-                          zeroLineColor: 'transparent'
-                        },
-                        ticks: {
-                          fontSize: 12,
-                          fontColor: '#000000',
-                        }
-              
-                      }],
-                      yAxes: [{
-                        display: true
-                      }],
+                            stacked: true,
+                            gridLines: {
+                                display:false
+                            },
+                            scaleLabel: {
+                              display: true,
+                              labelString: 'Date'
+                            }
+                        }],
+                        yAxes: [{
+                          stacked: true,
+                            gridLines: {
+                                display:false
+                            },
+                            scaleLabel: {
+                              display: true,
+                              labelString: 'Event Count'
+                            }
+                        }]
                   },
                   elements: {
                     line: {
-                      borderWidth: 2
+                      borderWidth: 1,
+                      fill: false
                     },
                     point: {
                       radius: 4,
@@ -331,11 +342,13 @@ export class DashboardComponent implements OnInit {
                     },
                   }
               },
-              //labels : ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
-              lables : lables,
-              chartType : 'line',
-              legend : true
+              labels : lables,
+              chartType : 'bar',
+              legend : true        
           }
+        }
+        else {
+            this.eventMsg = "Event not found!"
         }
       });
   }
@@ -347,47 +360,79 @@ export class DashboardComponent implements OnInit {
       // this.route.paramMap.subscribe(params => {
       //   this.appid = params.get("appid")
       // })
-
       this.appid = this.route.snapshot.paramMap.get("appid");
-      this.installs();
-      this.active();
-      this.engagements();
-      this.churn();
+      this.installs(this.start, this.end);
+      this.active(this.start, this.end);
+      this.engagements(this.start, this.end);
+      this.churn(this.start, this.end);
       this.events(this.start, this.end);
   }
 
-  convertHex(hex,opacity){
-      hex = hex.replace('#','');
-      var r = parseInt(hex.substring(0,2), 16);
-      var g = parseInt(hex.substring(2,4), 16);
-      var b = parseInt(hex.substring(4,6), 16);
-    
-      return 'rgba('+r+','+g+','+b+','+opacity/100+')';
-  }
-
-  selectEventTime (time){
-      //console.log(`time : ${time}`);
-      this.eventdata = '';
-      var start = this.start, end = this.end;
-      switch(time){
-          case 'day' : {
-              start = moment().startOf('day').valueOf()/1000;
-              end = moment().endOf('day').valueOf()/1000;
-              break;
-          }
-          case 'month' : {
-              start = moment().subtract('days',30).startOf('day').valueOf()/1000;
-              end = moment().endOf('day').valueOf()/1000;
-              break;
-          }
-          case 'month' : {
-              start = moment('01-01-'+moment().format('YYYY'), 'DD-MM-YYYY').startOf('day').valueOf()/1000;
-              end = moment().endOf('day').valueOf()/1000;
-              break;
-          }
-      }
+  /**
+   * Get current timefram
+   * @param time 
+   */
+  selectEventTime ({start, end}){
+      // //console.log(`time : ${time}`);
+      // this.eventdata = '';
+      // var start = this.start, end = this.end;
+      // switch(time){
+      //     case 'day' : {
+      //         start = moment().startOf('day').valueOf()/1000;
+      //         end = moment().endOf('day').valueOf()/1000;
+      //         break;
+      //     }
+      //     case 'month' : {
+      //         start = moment().subtract('days',30).startOf('day').valueOf()/1000;
+      //         end = moment().endOf('day').valueOf()/1000;
+      //         break;
+      //     }
+      //     case 'month' : {
+      //         start = moment('01-01-'+moment().format('YYYY'), 'DD-MM-YYYY').startOf('day').valueOf()/1000;
+      //         end = moment().endOf('day').valueOf()/1000;
+      //         break;
+      //     }
+      // }
       //console.log(start, "  ", end);
-      this.events(start, end);
+      this.eventdata = '';
+      this.eventMsg = '';
+      this.events(moment(start, 'YYYY-MM-DD').valueOf()/1000, moment(end, 'YYYY-MM-DD').valueOf()/1000);
   }
 
+  /**
+   * Get input from datepicker child
+   * @param event 
+   */
+  getChangeDate ({start, end}){
+      this.installs(moment(start, 'YYYY-MM-DD').valueOf()/1000, moment(end, 'YYYY-MM-DD').valueOf()/1000);
+      this.active(moment(start, 'YYYY-MM-DD').valueOf()/1000, moment(end, 'YYYY-MM-DD').valueOf()/1000);
+      this.engagements(moment(start, 'YYYY-MM-DD').valueOf()/1000, moment(end, 'YYYY-MM-DD').valueOf()/1000);
+      this.churn(moment(start, 'YYYY-MM-DD').valueOf()/1000, moment(end, 'YYYY-MM-DD').valueOf()/1000);
+  }
+
+  /**
+   * Get random hex color code
+   */
+  private getRandomColor() {
+      var letters = '0123456789ABCDEF'.split('');
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+
+      return color;
+  }
+  
+  /**
+   * get sorted object 
+   * @param data 
+   * @return object
+   */
+  private shortObject (data: any){
+     return Object.keys(data)
+                    .sort().reduce((a, v) => {
+                      a[v] = data[v];
+                      return a; }
+                  , {});
+  }
 }

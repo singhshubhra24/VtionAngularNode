@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppsService } from '../../service/apps.service';
-import { Apps } from '../../models/apps';
+import { Apps, AppData } from '../../models/apps';
 import * as $ from 'jquery';
 
 @Component({
@@ -10,14 +10,14 @@ import * as $ from 'jquery';
 })
 export class HomeComponent implements OnInit {
 
-  public apps : Apps [];
+  public apps : AppData [];
   public isApps : boolean = true;
   constructor(private appsService : AppsService) { }
 
   getAllAppsData(){
     this.appsService.getAppsData().subscribe(result =>{
-        if(result['statusCode'] == 200){
-          this.apps = result['data'];
+        if(result.statusCode == 200){
+          this.apps = result.data;
         }
         else {
             this.isApps = false;

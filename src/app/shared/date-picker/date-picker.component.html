@@ -1,0 +1,10 @@
+<span>Period: </span>
+<lib-daterangepicker 
+      [start] = "start"
+      [end] = "end"
+      [ranges]="customRanges" 
+      format="MMM DD YYYY" 
+      opens="left" 
+      [pill]="true"
+      (complete)='getChangeDate($event)'>
+</lib-daterangepicker>

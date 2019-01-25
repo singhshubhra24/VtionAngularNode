@@ -5,19 +5,17 @@
 
   <!-- Main content -->
   <main class="main">
-    <!-- Breadcrumb -->
-    <ol class="breadcrumb">
-      <!-- Breadcrumb Menu-->
-      <li class="breadcrumb-item active">
-        <div class="btn-group" role="group" >
-          <!-- <a class="btn" href="#"><i class="icon-speech"></i></a> -->
-          <a class="btn">Dashboard</a>
-          <!-- <a class="btn"><i class="icon-settings"></i> &nbsp;Settings</a> -->
-        </div>
-      </li>
-
-    </ol>
-
+      <ol class="breadcrumb" breadcrumb="">
+          <li class="breadcrumb-item active">
+            <!-- <a href="#!/dashboard" class="ng-binding ng-scope">Home</a> -->
+            <span>Dashboard</span>
+          </li>
+          <!-- Breadcrumb Menu-->
+          <li class="breadcrumb-menu">
+              <app-date-picker (changeDate)='getChangeDate($event)'></app-date-picker>
+          </li>
+    
+      </ol>
     <div class="container-fluid">
         <div class="animated fadeIn">
             <div class="row">
@@ -134,7 +132,7 @@
                   
                   <div class="col-sm-7 d-none d-md-block">
                     <!-- <button type="button" class="btn btn-primary float-right"><i class="icon-cloud-download"></i></button> -->
-                    <div class="btn-group btn-group-toggle float-right mr-3" data-toggle="buttons">
+                    <!-- <div class="btn-group btn-group-toggle float-right mr-3" data-toggle="buttons">
                       <label class="btn btn-outline-secondary" (click)="selectEventTime('day')">
                         <input type="radio" name="options" id="option1"  autocomplete="off"> Day
                       </label>
@@ -144,6 +142,9 @@
                       <label class="btn btn-outline-secondary" (click)="selectEventTime('year')">
                         <input type="radio" name="options" id="option3" autocomplete="off"> Year
                       </label>
+                    </div> -->
+                    <div class="btn-group btn-group-toggle float-right mr-3" data-toggle="buttons">
+                        <app-date-picker (changeDate)='selectEventTime($event)'></app-date-picker>
                     </div>
                   </div>
                   
@@ -160,6 +161,10 @@
                         </canvas>
                     <div class="loader" *ngIf="!eventdata">
                         <img src="./assets/img/loader.gif" />
+                    </div>
+
+                    <div *ngIf="eventMsg">
+                        <p>{{eventMsg}}</p>
                     </div>
                 </div>
               </div>
