@@ -17,7 +17,7 @@ const routes : Routes =[
     {
       path:'dashboard/:appid',
       component : DashboardComponent
-  }
+    }
 ]
 
 @NgModule({
